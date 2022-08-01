@@ -1,0 +1,34 @@
+<!doctype html>
+<html>
+  <head>
+    <link
+        rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/rrweb-player@0.7.14/dist/style.css"
+    />
+    <style>
+     #player { font-family: sans-serif !important }
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/rrweb-player@0.7.14/dist/index.js"></script>
+  </head>
+  <body>
+    <div id="player"></div>
+    <script>
+     const events = [
+         {% for event in events %}
+         {
+             'type': {{ event.kind }},
+             'data': {{ event.data|safe }},
+             'timestamp': {{ event.timestamp }},
+         },
+         {% endfor %}
+     ];
+     let divPlayer = document.getElementById("player");
+     let player = new rrwebPlayer({
+         target: divPlayer,
+         props: {
+             events,
+         },
+     });
+    </script>
+  </body>
+</html>
