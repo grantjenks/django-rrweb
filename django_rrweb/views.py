@@ -2,7 +2,7 @@ import json
 
 from django.http import HttpResponse
 
-from .models import Event, Session
+from .models import Event
 
 
 def record(request):
