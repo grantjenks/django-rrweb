@@ -23,6 +23,6 @@ class Migration(migrations.Migration):
                 GROUP BY session_key
             """,
             reverse_sql='DROP VIEW django_rrweb_session',
-            hints={'target_db': 'default', 'model_name': 'Session'}
+            hints={'target_db': 'default', 'model_name': 'Session'},
         ),
     ]

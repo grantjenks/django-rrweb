@@ -17,7 +17,12 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Session',
             fields=[
-                ('session_key', models.CharField(max_length=100, primary_key=True, serialize=False)),
+                (
+                    'session_key',
+                    models.CharField(
+                        max_length=100, primary_key=True, serialize=False
+                    ),
+                ),
                 ('create_time', models.DateTimeField()),
                 ('timestamp', models.BigIntegerField()),
                 ('duration', models.BigIntegerField()),
@@ -31,13 +36,29 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Event',
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                (
+                    'id',
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name='ID',
+                    ),
+                ),
                 ('create_time', models.DateTimeField(auto_now_add=True)),
                 ('kind', models.SmallIntegerField()),
                 ('data', models.TextField(blank=True)),
                 ('timestamp', models.BigIntegerField()),
                 ('session_key', models.CharField(max_length=100)),
-                ('user', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),
+                (
+                    'user',
+                    models.ForeignKey(
+                        blank=True,
+                        null=True,
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to=settings.AUTH_USER_MODEL,
+                    ),
+                ),
             ],
         ),
     ]

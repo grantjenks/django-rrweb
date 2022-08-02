@@ -61,6 +61,8 @@ class ReplayTestCase(TestCase):
         self.client.force_login(self.user)
         response = self.client.get('/backend/django_rrweb/session/abc/delete/')
         assert response
-        response = self.client.post('/backend/django_rrweb/session/abc/delete/')
+        response = self.client.post(
+            '/backend/django_rrweb/session/abc/delete/'
+        )
         assert response
         assert Event.objects.all().count() == 0
