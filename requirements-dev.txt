@@ -1,4 +1,14 @@
 -e .
-django
+blue
+coverage
+doc8
+flake8
 ipython
 pytest
+pytest-cov
+pytest-django
+rstcheck
+sphinx
+tox
+twine
+wheel

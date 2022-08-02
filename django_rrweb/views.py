@@ -6,6 +6,9 @@ from .models import Event, Session
 
 
 def record(request):
+    """Record event
+
+    """
     obj = json.load(request)
     events = [
         Event(

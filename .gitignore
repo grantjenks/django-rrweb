@@ -1,7 +1,21 @@
-*.pyc
+# Python byte-code
+*.py[co]
+
+# Anything under a virutalenv directory
+/env*/
+
+# Coverage files.
+.coverage
+
+# Test, build, and deployment directories.
+/.cache/
+/.tox/
+/build/
+/dist/
+/*.egg-info/
+
+.DS_Store
 
 db.sqlite3
 
-env*/
-
-*.egg-info/
+/docs/_build/

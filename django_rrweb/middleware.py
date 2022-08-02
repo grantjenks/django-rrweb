@@ -2,7 +2,9 @@ from uuid import uuid4
 
 
 def session_key_middleware(get_response):
+    """Session key middleware
 
+    """
     def middleware(request):
         session_key = request.COOKIES.get('rrweb-session-key')
 
