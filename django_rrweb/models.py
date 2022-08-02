@@ -13,14 +13,14 @@ class Event(models.Model):
     kind = models.SmallIntegerField()
     data = models.TextField(blank=True)
     timestamp = models.BigIntegerField()
-    session_key = models.UUIDField()
+    session_key = models.CharField(max_length=100)
 
     def __repr__(self):
         return f'Event<{self.id}@{self.timestamp}>'
 
 
 class Session(models.Model):
-    session_key = models.UUIDField(primary_key=True)
+    session_key = models.CharField(primary_key=True, max_length=100)
     create_time = models.DateTimeField()
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL,

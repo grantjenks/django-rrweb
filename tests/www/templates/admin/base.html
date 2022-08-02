@@ -36,7 +36,11 @@
        );
    }
 
-   const sessionKey = uuidv4();
+   let sessionKey = getCookie('sessionid');
+
+   if (sessionKey === null) {
+       sessionKey = uuidv4();
+   }
 
    let rrwebEvents = [];
 
