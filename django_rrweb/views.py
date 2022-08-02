@@ -22,9 +22,7 @@ def record(request):
     return HttpResponse('OK', content_type='text/plain')
 
 
-def replay(request, session_key):
+def replay_session(request, session_key):
     session = get_object_or_404(Session, session_key=session_key)
-    events = Event.objects.filter(session_key=session_key)
-    events = list(events.order_by('timestamp'))
-    events = Event.objects.all().order_by('id')
+    events = Event.objects.filter(session_key=session_key).order_by('id')
     return render(request, 'django-rrweb/replay.html', {'events': events})
