@@ -1,0 +1,53 @@
+{% extends "admin/base_site.html" %}
+{% load i18n static humanize %}
+
+{% block extrastyle %}
+  {{ block.super }}
+  <link rel="stylesheet" type="text/css" href="{% static "admin/css/dashboard.css" %}">
+  <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/rrweb-player@0.7.14/dist/style.css">
+  <style>
+   #player { font-family: sans-serif !important }
+  </style>
+{% endblock %}
+
+{% block extrahead %}
+  {{ block.super }}
+  <script src="https://cdn.jsdelivr.net/npm/rrweb-player@0.7.14/dist/index.js"></script>
+{% endblock %}
+
+{% block coltype %}colM{% endblock %}
+
+{% block bodyclass %}{{ block.super }} dashboard delete-confirmation{% endblock %}
+
+{% block breadcrumbs %}
+  <div class="breadcrumbs">
+    <a href="{% url 'admin:index' %}">{% translate 'Home' %}</a>
+    &rsaquo; <a href="{% url 'admin:app_list' 'django_rrweb' %}">Django_Rrweb</a>
+    &rsaquo; <a href="{% url 'admin:django_rrweb_session_changelist' %}">Sessions</a>
+    &rsaquo; <a href="{% url 'admin:django_rrweb_session_change' session.session_key %}">{{ session.session_key }}</a>
+    &rsaquo; Delete
+  </div>
+{% endblock %}
+
+{% block content %}
+  <div id="content-main">
+    <h1>Are you sure?</h1>
+
+    <p>Are you sure you want to delete the session "{{ session.session_key }}"? All of the following related items will be deleted:</p>
+    
+    <h2>Summary</h2>
+    <ul>
+      <li>Events: {{ session.event_count|intcomma }}</li>
+      <li>Create time: {{ session.create_time }}</li>
+      <li>Duration: {{ session.duration|intcomma }}</li>
+      <li>Size: {{ session.event_size|intcomma }}</li>
+    </ul>
+
+    <form method="post">
+      {% csrf_token %}
+      <input type="submit" value="Yes, I’m sure">
+      <a href="{% url 'admin:django_rrweb_session_changelist' %}" class="button cancel-link">No, take me back</a>
+    </form>
+    <br class="clear">
+  </div>
+{% endblock %}

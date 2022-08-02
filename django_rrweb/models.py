@@ -15,9 +15,6 @@ class Event(models.Model):
     timestamp = models.BigIntegerField()
     session_key = models.CharField(max_length=100)
 
-    def __repr__(self):
-        return f'Event<{self.id}@{self.timestamp}>'
-
 
 class Session(models.Model):
     session_key = models.CharField(primary_key=True, max_length=100)
@@ -33,8 +30,8 @@ class Session(models.Model):
     event_count = models.IntegerField()
     event_size = models.BigIntegerField()
 
-    def __repr__(self):
-        return f'Session<{self.session_key}>'
+    def __str__(self):
+        return self.session_key
 
     class Meta:
         managed = False
