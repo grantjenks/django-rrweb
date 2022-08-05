@@ -2,6 +2,7 @@ import json
 from uuid import uuid4
 
 from django.http import HttpResponse
+from django.shortcuts import render
 
 from .models import Event
 
@@ -24,7 +25,11 @@ def record(request):
 
 
 def record_script(request):
-    session_key = request.session.get('rrweb-session-key')
+    session_key = request.session.get('rrweb_session_key')
     if session_key is None:
-        request.session['rrweb-session-key'] = str(uuid4())
-    return render(request, 'django-rrweb/record-script.js')
+        request.session['rrweb_session_key'] = str(uuid4())
+    return render(
+        request,
+        'django-rrweb/record-script.js',
+        content_type='text/javascript',
+    )
