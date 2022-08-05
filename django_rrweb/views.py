@@ -1,4 +1,5 @@
 import json
+from uuid import uuid4
 
 from django.http import HttpResponse
 
@@ -20,3 +21,10 @@ def record(request):
     ]
     Event.objects.bulk_create(events)
     return HttpResponse('OK', content_type='text/plain')
+
+
+def record_script(request):
+    session_key = request.session.get('rrweb-session-key')
+    if session_key is None:
+        request.session['rrweb-session-key'] = str(uuid4())
+    return render(request, 'django-rrweb/record-script.js')
