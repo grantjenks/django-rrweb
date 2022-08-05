@@ -7,9 +7,10 @@ from django.shortcuts import render
 from .models import Event
 
 
-def record(request):
-    """Record event"""
+def record_events(request):
+    """Record events"""
     obj = json.load(request)
+    assert obj['sessionKey']
     events = [
         Event(
             user=None if request.user.is_anonymous else request.user,
