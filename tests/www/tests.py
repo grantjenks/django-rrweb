@@ -14,9 +14,9 @@ class ReplayTestCase(TestCase):
             password='password',
         )
 
-    def test_backend(self):
-        response = self.client.get('/backend/login/')
-        assert response
+    def test_record_script(self):
+        response = self.client.get('/backend/record/django-rrweb.js')
+        self.assertEqual(response.status_code, 200)
 
     def test_record(self):
         event = {
@@ -35,32 +35,32 @@ class ReplayTestCase(TestCase):
             ],
         }
         response = self.client.post(
-            '/backend/rrweb/record/',
+            '/backend/record/',
             event,
             content_type='application/json',
         )
-        assert response
+        self.assertEqual(response.status_code, 200)
 
     def test_admin_session(self):
         self.test_record()
         self.client.force_login(self.user)
         response = self.client.get('/backend/django_rrweb/session/')
-        assert response
+        self.assertEqual(response.status_code, 200)
 
     def test_admin_session_replay(self):
         self.test_record()
         self.client.force_login(self.user)
         response = self.client.get('/backend/django_rrweb/session/abc/replay/')
-        assert response
+        self.assertEqual(response.status_code, 200)
 
     def test_admin_session_delete(self):
         self.test_record()
-        assert Event.objects.all().count() == 2
+        self.assertEqual(Event.objects.all().count(), 2)
         self.client.force_login(self.user)
         response = self.client.get('/backend/django_rrweb/session/abc/delete/')
-        assert response
+        self.assertEqual(response.status_code, 200)
         response = self.client.post(
             '/backend/django_rrweb/session/abc/delete/'
         )
-        assert response
-        assert Event.objects.all().count() == 0
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(Event.objects.all().count(), 0)
