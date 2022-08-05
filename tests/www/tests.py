@@ -15,7 +15,7 @@ class ReplayTestCase(TestCase):
         )
 
     def test_record_script(self):
-        response = self.client.get('/backend/record/django-rrweb.js')
+        response = self.client.get('/backend/django_rrweb/record/script/')
         self.assertEqual(response.status_code, 200)
 
     def test_record(self):
@@ -35,7 +35,7 @@ class ReplayTestCase(TestCase):
             ],
         }
         response = self.client.post(
-            '/backend/record/',
+            '/backend/django_rrweb/record/events/',
             event,
             content_type='application/json',
         )

@@ -28,7 +28,7 @@
     function rrwebSave() {
         const body = JSON.stringify({ sessionKey, rrwebEvents });
         rrwebEvents = [];
-        fetch("//{{ request.get_host }}{% url 'rrweb-record' %}", {
+        fetch("//{{ request.get_host }}{% url 'django-rrweb-record-events' %}", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",

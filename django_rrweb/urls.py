@@ -3,10 +3,14 @@ from django.urls import path
 from . import views
 
 urlpatterns = [
-    path('record/', views.record, name='rrweb-record'),
     path(
-        'record/django-rrweb.js',
+        'django_rrweb/record/events/',
+        views.record_events,
+        name='django-rrweb-record-events',
+    ),
+    path(
+        'django_rrweb/record/script/',
         views.record_script,
-        name='rrweb-record-script',
+        name='django-rrweb-record-script',
     ),
 ]
