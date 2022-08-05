@@ -28,23 +28,17 @@ Installing Django Rrweb is simple with `pip
 
     $ pip install django-rrweb
 
-Changes to `settings.py` like:
+Change `settings.py` like:
 
 .. code::
 
    INSTALLED_APPS += ['django.contrib.humanize', 'django_rrweb']
 
-And
+Change `urls.py` like:
 
 .. code::
 
-   MIDDLEWARE += ['django_rrweb.middleware.session_key_middleware']
-
-Changes to `urls.py` like:
-
-.. code::
-
-   urlpatterns += [path('rrweb/', include('django_rrweb.urls'))]
+   urlpatterns += [path('backend/', include('django_rrweb.urls'))]
 
 The Django "admin" is also required for replaying and deleting sessions.
 
