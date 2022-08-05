@@ -26,11 +26,12 @@ def record_events(request):
 
 
 def record_script(request):
+    """Record script"""
     session_key = request.session.get('rrweb_session_key')
     if session_key is None:
         request.session['rrweb_session_key'] = str(uuid4())
     return render(
         request,
         'django-rrweb/record-script.js',
-        content_type='text/javascript',
+        content_type='application/javascript',
     )
