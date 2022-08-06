@@ -38,3 +38,20 @@ ssh dokku@django-rrweb.com postgres:link postgres144-django-rrweb django-rrweb
 ssh dokku@django-rrweb.com config:set --no-restart django-rrweb DOKKU_LETSENCRYPT_EMAIL=webmaster@django-rrweb.com
 ssh dokku@django-rrweb.com letsencrypt:enable django-rrweb
 ```
+
+
+### Django Config
+
+```
+DJANGO_SECRET_KEY=$(cat /dev/urandom | env LC_ALL=C tr -dc a-zA-Z0-9 | fold -w ${1:-60} | head -n 1)
+ssh dokku@django-rrweb.com config:set --no-restart django-rrweb DJANGO_SECRET_KEY=${DJANGO_SECRET_KEY}
+ssh dokku@django-rrweb.com config:set --no-restart django-rrweb DJANGO_RRWEB_ENVIRONMENT=production
+```
+
+
+### Local Database Config
+
+```
+sudo su - postgres
+(postgres) /opt/local/bin/createdb -O grantjenks django-rrweb
+```
