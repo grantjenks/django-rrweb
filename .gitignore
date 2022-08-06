@@ -12,7 +12,7 @@
 /.tox/
 /build/
 /dist/
-/*.egg-info/
+*.egg-info/
 
 .DS_Store
 
