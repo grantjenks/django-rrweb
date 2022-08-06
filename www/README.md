@@ -55,3 +55,11 @@ ssh dokku@django-rrweb.com config:set --no-restart django-rrweb DJANGO_RRWEB_ENV
 sudo su - postgres
 (postgres) /opt/local/bin/createdb -O grantjenks django-rrweb
 ```
+
+
+### Remote Git Config
+
+```
+git remote add dokku dokku@django-rrweb.com:django-rrweb
+git push dokku main:main
+```
