@@ -34,7 +34,7 @@
                 "Content-Type": "application/json",
                 "X-CSRFToken": csrfToken,
             },
-            mode: "same-origin",
+            mode: "cors",
             body,
         });
     }
