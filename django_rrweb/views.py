@@ -3,10 +3,12 @@ from uuid import uuid4
 
 from django.http import HttpResponse
 from django.shortcuts import render
+from django.views.decorators.csrf import csrf_exempt
 
 from .models import Event
 
 
+@csrf_exempt
 def record_events(request):
     """Record events"""
     obj = json.load(request)
