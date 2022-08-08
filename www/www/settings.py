@@ -52,7 +52,6 @@ MIDDLEWARE = [
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
-    'corsheaders.middleware.CorsPostCsrfMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
@@ -140,7 +139,6 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # CORS Configuration
 
 CORS_ALLOW_ALL_ORIGINS = True
-CORS_REPLACE_HTTPS_REFERER = True
 CORS_URLS_REGEX = r'^/backend/django_rrweb/record/.*$'
 
 SESSION_COOKIE_SAMESITE = 'None'
