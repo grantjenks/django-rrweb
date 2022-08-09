@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.db.models import Count, Max, Min, Sum
 from django.db.models.functions import Length
-from django.shortcuts import get_object_or_404, redirect, render
+from django.shortcuts import get_object_or_404, render
 from django.urls import path, reverse
 from django.utils.html import format_html
 

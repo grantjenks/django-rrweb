@@ -1,6 +1,5 @@
 import datetime as dt
 import json
-from uuid import uuid4
 
 from django.http import HttpResponse
 from django.shortcuts import render
@@ -54,7 +53,7 @@ def _new_session(request):
 
 def record_script(request):
     """Record script"""
-    session = _get_session(request)
+    _get_session(request)
     return render(
         request,
         'django-rrweb/record-script.js',
