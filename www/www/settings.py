@@ -139,6 +139,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # CORS Configuration
 
+CORS_ALLOW_CREDENTIALS = True
 CORS_ALLOWED_ORIGIN_REGEXES = r'.*'
 CORS_PREFLIGHT_MAX_AGE = 0
 CORS_URLS_REGEX = r'^/backend/django_rrweb/record/.*$'
