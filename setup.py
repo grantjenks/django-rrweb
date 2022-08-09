@@ -46,7 +46,7 @@ setuptools.setup(
         'Source': 'https://github.com/grantjenks/django-rrweb',
         'Tracker': 'https://github.com/grantjenks/django-rrweb/issues',
     },
-    classifiers=(
+    classifiers=[
         'Development Status :: 5 - Production/Stable',
         'Intended Audience :: Developers',
         'License :: OSI Approved :: Apache Software License',
@@ -54,5 +54,5 @@ setuptools.setup(
         'Programming Language :: Python',
         'Programming Language :: Python :: 3',
         'Programming Language :: Python :: Implementation :: CPython',
-    ),
+    ],
 )
