@@ -1,1 +1,3 @@
-include README.rst LICENSE
+include LICENSE
+include README.rst
+include django_rrweb/templates/django-rrweb/*

@@ -38,6 +38,7 @@ setuptools.setup(
     url='https://grantjenks.com/docs/django-rrweb/',
     license='Apache 2.0',
     packages=['django_rrweb'],
+    include_package_data=True,
     tests_require=['tox'],
     cmdclass={'test': Tox},
     install_requires=['Django'],
