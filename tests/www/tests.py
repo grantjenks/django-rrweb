@@ -19,7 +19,7 @@ class ReplayTestCase(TestCase):
         self.assertEqual(response.status_code, 200)
 
     def test_record(self):
-        event = {
+        data = {
             'rrwebEvents': [
                 {
                     'type': 0,
@@ -35,7 +35,13 @@ class ReplayTestCase(TestCase):
         }
         response = self.client.post(
             '/backend/django_rrweb/record/events/',
-            event,
+            data,
+            content_type='application/json',
+        )
+        self.assertEqual(response.status_code, 200)
+        response = self.client.post(
+            '/backend/django_rrweb/record/events/',
+            data,
             content_type='application/json',
         )
         self.assertEqual(response.status_code, 200)
