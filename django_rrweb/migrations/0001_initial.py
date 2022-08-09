@@ -8,25 +8,47 @@ class Migration(migrations.Migration):
 
     initial = True
 
-    dependencies = [
-    ]
+    dependencies = []
 
     operations = [
         migrations.CreateModel(
             name='Session',
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                (
+                    'id',
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name='ID',
+                    ),
+                ),
                 ('create_time', models.DateTimeField(auto_now_add=True)),
             ],
         ),
         migrations.CreateModel(
             name='Event',
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                (
+                    'id',
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name='ID',
+                    ),
+                ),
                 ('kind', models.SmallIntegerField()),
                 ('data', models.TextField(blank=True)),
                 ('timestamp', models.BigIntegerField()),
-                ('session', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='events', to='django_rrweb.session')),
+                (
+                    'session',
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name='events',
+                        to='django_rrweb.session',
+                    ),
+                ),
             ],
         ),
     ]
