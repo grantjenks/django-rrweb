@@ -20,7 +20,6 @@ class ReplayTestCase(TestCase):
 
     def test_record(self):
         event = {
-            'sessionKey': 'abc',
             'rrwebEvents': [
                 {
                     'type': 0,
@@ -50,17 +49,5 @@ class ReplayTestCase(TestCase):
     def test_admin_session_replay(self):
         self.test_record()
         self.client.force_login(self.user)
-        response = self.client.get('/backend/django_rrweb/session/abc/replay/')
+        response = self.client.get('/backend/django_rrweb/session/1/replay/')
         self.assertEqual(response.status_code, 200)
-
-    def test_admin_session_delete(self):
-        self.test_record()
-        self.assertEqual(Event.objects.all().count(), 2)
-        self.client.force_login(self.user)
-        response = self.client.get('/backend/django_rrweb/session/abc/delete/')
-        self.assertEqual(response.status_code, 200)
-        response = self.client.post(
-            '/backend/django_rrweb/session/abc/delete/'
-        )
-        self.assertEqual(response.status_code, 302)
-        self.assertEqual(Event.objects.all().count(), 0)
