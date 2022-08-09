@@ -1,7 +1,7 @@
 (function () {
     let rrwebEvents = [];
 
-    rrweb.record({
+    rrwebRecord({
         emit(event) {
             rrwebEvents.push(event);
         },
