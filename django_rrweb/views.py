@@ -36,9 +36,8 @@ def _get_session(request):
             session = Session.objects.get(id=session_id)
         except Session.DoesNotExist:
             session = _new_session(request)
-    session_events = session.events.order_by('-timestamp')
-    timestamp = session_events.values_list('timestamp', flat=True).first()
-    if timestamp is None:
+    timestamp = session.max_timestamp()
+    if not timestamp:
         return session
     event_time = tz.make_aware(dt.datetime.fromtimestamp(timestamp / 1000))
     if tz.now() - event_time > dt.timedelta(minutes=10):
