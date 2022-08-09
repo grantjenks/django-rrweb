@@ -32,7 +32,10 @@ def _get_session(request):
     if session_id is None:
         session = _new_session(request)
     else:
-        session = Session.objects.get(id=session_id)
+        try:
+            session = Session.objects.get(id=session_id)
+        except Session.DoesNotExist:
+            session = _new_session(request)
     session_events = session.events.order_by('-timestamp')
     timestamp = session_events.values_list('timestamp', flat=True).first()
     if timestamp is None:
