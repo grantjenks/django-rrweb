@@ -24,7 +24,7 @@
     <a href="{% url 'admin:index' %}">{% translate 'Home' %}</a>
     &rsaquo; <a href="{% url 'admin:app_list' 'django_rrweb' %}">Django_Rrweb</a>
     &rsaquo; <a href="{% url 'admin:django_rrweb_session_changelist' %}">Sessions</a>
-    &rsaquo; <a href="{% url 'admin:django_rrweb_session_change' session.session_key %}">{{ session.session_key }}</a>
+    &rsaquo; <a href="{% url 'admin:django_rrweb_session_change' session.id %}">{{ session }}</a>
     &rsaquo; Replay
   </div>
 {% endblock %}

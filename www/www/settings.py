@@ -142,5 +142,5 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 CORS_ALLOW_ALL_ORIGINS = True
 CORS_URLS_REGEX = r'^/backend/django_rrweb/record/.*$'
 
-SESSION_COOKIE_SAMESITE = 'None'
+SESSION_COOKIE_SAMESITE = 'Lax' if DEBUG else 'None'
 SESSION_COOKIE_SECURE = not DEBUG

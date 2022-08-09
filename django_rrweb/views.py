@@ -1,25 +1,26 @@
+import datetime as dt
 import json
 from uuid import uuid4
 
 from django.http import HttpResponse
 from django.shortcuts import render
+from django.utils import timezone as tz
 from django.views.decorators.csrf import csrf_exempt
 
-from .models import Event
+from .models import Event, Session
 
 
 @csrf_exempt
 def record_events(request):
     """Record events"""
+    session = _get_session(request)
     obj = json.load(request)
-    assert obj['sessionKey']
     events = [
         Event(
-            user=None if request.user.is_anonymous else request.user,
             kind=event['type'],
             data=json.dumps(event['data']),
             timestamp=event['timestamp'],
-            session_key=obj['sessionKey'],
+            session=session,
         )
         for event in obj['rrwebEvents']
     ]
@@ -27,11 +28,33 @@ def record_events(request):
     return HttpResponse('OK', content_type='text/plain')
 
 
+def _get_session(request):
+    session_id = request.session.get('django_rrweb_session_id')
+    if session_id is None:
+        session = _new_session(request)
+    else:
+        session = Session.objects.get(id=session_id)
+    session_events = session.events.order_by('-timestamp')
+    timestamp = session_events.values_list('timestamp', flat=True).first()
+    if timestamp is None:
+        return session
+    event_time = tz.make_aware(dt.datetime.fromtimestamp(timestamp / 1000))
+    if tz.now() - event_time > dt.timedelta(minutes=10):
+        session = _new_session(request)
+    return session
+
+
+def _new_session(request):
+    session = Session()
+    session.save()
+    session_id = session.id
+    request.session['django_rrweb_session_id'] = session_id
+    return session
+
+
 def record_script(request):
     """Record script"""
-    session_key = request.session.get('rrweb_session_key')
-    if session_key is None:
-        request.session['rrweb_session_key'] = str(uuid4())
+    session = _get_session(request)
     return render(
         request,
         'django-rrweb/record-script.js',

@@ -1,5 +1,4 @@
 (function () {
-    let sessionKey = "{{ request.session.rrweb_session_key }}";
     let rrwebEvents = [];
 
     rrweb.record({
@@ -9,7 +8,7 @@
     });
 
     function rrwebSave() {
-        const body = JSON.stringify({ sessionKey, rrwebEvents });
+        const body = JSON.stringify({ rrwebEvents });
         rrwebEvents = [];
         fetch("//{{ request.get_host }}{% url 'django-rrweb-record-events' %}", {
             method: "POST",
@@ -22,4 +21,6 @@
     }
 
     setInterval(rrwebSave, 1000);
+    window.addEventListener('beforeunload', rrwebSave);
+    window.addEventListener('unload', rrwebSave);
 })();

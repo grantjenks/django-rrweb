@@ -1,4 +1,6 @@
 from django.contrib import admin
+from django.db.models import Count, Max, Min, Sum
+from django.db.models.functions import Length
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import path, reverse
 from django.utils.html import format_html
@@ -8,80 +10,78 @@ from .models import Event, Session
 
 @admin.register(Event)
 class EventAdmin(admin.ModelAdmin):
-    list_display = ['create_time', 'user', 'session_key']
+    list_display = ['session', 'timestamp']
+    list_select_related = ['session']
 
 
 @admin.register(Session)
 class SessionAdmin(admin.ModelAdmin):
     list_display = [
         'create_time',
-        'session_key',
-        'user',
         'duration',
         'event_count',
-        'event_size',
+        'event_data_size',
         'link_view',
-        'link_delete',
     ]
 
     fields = [
-        'session_key',
         'create_time',
-        'user',
-        'timestamp',
         'duration',
         'event_count',
-        'event_size',
+        'event_data_size',
         'link_view',
-        'link_delete',
     ]
 
-    def has_add_permission(self, request):
-        return False
+    readonly_fields = fields
 
-    def has_change_permission(self, request, obj=None):
-        return False
+    def get_queryset(self, request):
+        queryset = super().get_queryset(request)
+        queryset = (
+            queryset.annotate(event_count_num=Count('events__id'))
+            .annotate(
+                duration_num=(
+                    Max('events__timestamp') - Min('events__timestamp')
+                )
+            )
+            .annotate(event_data_size_num=Sum(Length('events__data')))
+        )
+        return queryset
 
-    def has_delete_permission(self, request, obj=None):
-        return False
+    @admin.display(
+        description='Duration',
+        ordering='duration_num',
+    )
+    def duration(self, obj):
+        return obj.duration()
+
+    @admin.display(
+        description='Event Count',
+        ordering='event_count_num',
+    )
+    def event_count(self, obj):
+        return obj.event_count()
+
+    @admin.display(
+        description='Event Data Size',
+        ordering='event_data_size_num',
+    )
+    def event_data_size(self, obj):
+        return obj.event_data_size()
 
     @admin.display(
         description='View',
-        ordering='session_key',
+        ordering='create_time',
     )
     def link_view(self, obj):
         url = reverse(
-            'admin:rrweb-session-replay',
-            kwargs={'session_key': obj.session_key},
+            'admin:django-rrweb-session-replay',
+            kwargs={'session_id': obj.id},
         )
         return format_html('<a href="{url}">view</a>', url=url)
 
-    @admin.display(
-        description='Delete',
-        ordering='session_key',
-    )
-    def link_delete(self, obj):
-        url = reverse(
-            'admin:rrweb-session-delete',
-            kwargs={'session_key': obj.session_key},
-        )
-        return format_html('<a href="{url}">delete</a>', url=url)
-
-    def delete_view(self, request, session_key):
-        session = get_object_or_404(Session, session_key=session_key)
-        if request.method == 'POST':
-            events = Event.objects.filter(session_key=session_key)
-            events.delete()
-            return redirect('admin:django_rrweb_session_changelist')
-        context = dict(
-            self.admin_site.each_context(request),
-            session=session,
-        )
-        return render(request, 'django-rrweb/session-delete.html', context)
-
-    def replay_view(self, request, session_key):
-        session = get_object_or_404(Session, session_key=session_key)
-        events = Event.objects.filter(session_key=session_key).order_by('id')
+    def replay_view(self, request, session_id):
+        session = get_object_or_404(Session, id=session_id)
+        events = session.events.order_by('id')
         context = dict(
             self.admin_site.each_context(request),
             events=events,
@@ -91,14 +91,10 @@ class SessionAdmin(admin.ModelAdmin):
 
     def get_urls(self):
         urls = super().get_urls()
-        delete_path = path(
-            '<session_key>/delete/',
-            self.delete_view,
-            name='rrweb-session-delete',
-        )
         replay_path = path(
-            '<session_key>/replay/',
+            '<session_id>/replay/',
             self.replay_view,
-            name='rrweb-session-replay',
+            name='django-rrweb-session-replay',
         )
-        return [delete_path, replay_path] + urls
+        urls.insert(0, replay_path)
+        return urls
