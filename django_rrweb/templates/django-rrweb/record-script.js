@@ -11,10 +11,11 @@
         const body = JSON.stringify({ rrwebEvents });
         rrwebEvents = [];
         fetch("//{{ request.get_host }}{% url 'django-rrweb-record-events' %}", {
-            method: "POST",
+            credentials: "include",
             headers: {
                 "Content-Type": "application/json",
             },
+            method: "POST",
             mode: "cors",
             body,
         });
