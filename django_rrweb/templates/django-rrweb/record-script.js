@@ -21,7 +21,7 @@
         });
     }
 
-    setInterval(rrwebSave, 1000);
+    setInterval(rrwebSave, 10000);
     window.addEventListener('beforeunload', rrwebSave);
     window.addEventListener('unload', rrwebSave);
 })();
