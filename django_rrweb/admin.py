@@ -39,17 +39,13 @@ class SessionAdmin(admin.ModelAdmin):
         queryset = (
             queryset.annotate(event_count_num=Count('events__id'))
             .annotate(
-                duration_num=(
-                    Coalesce(
-                        Max('events__timestamp') - Min('events__timestamp'),
-                        0,
-                    )
+                duration_num=Coalesce(
+                    Max('events__timestamp') - Min('events__timestamp'),
+                    0,
                 )
             )
             .annotate(
-                event_data_size_num=(
-                    Coalesce(Sum(Length('events__data')), 0)
-                )
+                event_data_size_num=Coalesce(Sum(Length('events__data')), 0)
             )
         )
         return queryset
