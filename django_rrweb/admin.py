@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.db.models import Count, Max, Min, Sum
-from django.db.models.functions import Length
+from django.db.models.functions import Coalesce, Length
 from django.shortcuts import get_object_or_404, render
 from django.urls import path, reverse
 from django.utils.html import format_html
@@ -40,10 +40,17 @@ class SessionAdmin(admin.ModelAdmin):
             queryset.annotate(event_count_num=Count('events__id'))
             .annotate(
                 duration_num=(
-                    Max('events__timestamp') - Min('events__timestamp')
+                    Coalesce(
+                        Max('events__timestamp') - Min('events__timestamp'),
+                        0,
+                    )
                 )
             )
-            .annotate(event_data_size_num=Sum(Length('events__data')))
+            .annotate(
+                event_data_size_num=(
+                    Coalesce(Sum(Length('events__data')), 0)
+                )
+            )
         )
         return queryset
 
@@ -52,25 +59,24 @@ class SessionAdmin(admin.ModelAdmin):
         ordering='duration_num',
     )
     def duration(self, obj):
-        return obj.duration()
+        return obj.duration_num
 
     @admin.display(
         description='Event Count',
         ordering='event_count_num',
     )
     def event_count(self, obj):
-        return obj.event_count()
+        return obj.event_count_num
 
     @admin.display(
         description='Event Data Size',
         ordering='event_data_size_num',
     )
     def event_data_size(self, obj):
-        return obj.event_data_size()
+        return obj.event_data_size_num
 
     @admin.display(
         description='View',
-        ordering='create_time',
     )
     def link_view(self, obj):
         url = reverse(
