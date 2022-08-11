@@ -15,13 +15,14 @@
             headers: {
                 "Content-Type": "application/json",
             },
+            keepalive: true,
             method: "POST",
             mode: "cors",
             body,
         });
     }
 
-    setInterval(rrwebSave, 10000);
+    setInterval(rrwebSave, 1000);
     window.addEventListener('beforeunload', rrwebSave);
     window.addEventListener('unload', rrwebSave);
 })();
