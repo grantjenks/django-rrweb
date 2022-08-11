@@ -87,7 +87,7 @@ class SessionAdmin(admin.ModelAdmin):
 
     def replay_view(self, request, session_id):
         session = get_object_or_404(Session, id=session_id)
-        events = session.events.order_by('id')
+        events = session.events.order_by('timestamp')
         context = dict(
             self.admin_site.each_context(request),
             events=events,
