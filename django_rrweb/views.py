@@ -55,7 +55,6 @@ def _new_session(request):
 
 def record_script(request):
     """Record script"""
-    _get_session(request)
     return render(
         request,
         'django-rrweb/record-script.js',
