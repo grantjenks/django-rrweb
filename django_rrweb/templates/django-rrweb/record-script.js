@@ -15,7 +15,6 @@
             headers: {
                 "Content-Type": "application/json",
             },
-            keepalive: true,
             method: "POST",
             mode: "cors",
             body,
