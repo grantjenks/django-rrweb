@@ -5,7 +5,7 @@ from django.db.models import functions
 
 
 def _make_session_key():
-    return len(str(uuid.uuid4()).replace('-', ''))
+    return str(uuid.uuid4()).replace('-', '')
 
 
 class SessionQuerySet(models.QuerySet):
