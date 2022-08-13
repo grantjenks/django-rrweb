@@ -1,8 +1,9 @@
+import datetime as dt
+
 from django.contrib import admin
-from django.db.models import Count, Max, Min, Sum
-from django.db.models.functions import Coalesce, Length
 from django.shortcuts import get_object_or_404, render
 from django.urls import path, reverse
+from django.utils import timezone as tz
 from django.utils.html import format_html
 
 from .models import Event, Session
@@ -10,52 +11,47 @@ from .models import Event, Session
 
 @admin.register(Event)
 class EventAdmin(admin.ModelAdmin):
-    list_display = ['session', 'timestamp']
+    list_display = ['id', 'session', 'kind', 'timestamp']
     list_select_related = ['session']
+    readonly_fields = ['session']
 
 
 @admin.register(Session)
 class SessionAdmin(admin.ModelAdmin):
     list_display = [
         'create_time',
-        'duration',
+        'key',
+        'event_duration',
         'event_count',
         'event_data_size',
+        'event_min_timestamp',
+        'event_max_timestamp',
         'link_view',
     ]
 
     fields = [
         'create_time',
-        'duration',
+        'key',
+        'event_duration',
         'event_count',
         'event_data_size',
+        'event_min_timestamp',
+        'event_max_timestamp',
         'link_view',
     ]
 
     readonly_fields = fields
 
     def get_queryset(self, request):
-        queryset = super().get_queryset(request)
-        queryset = (
-            queryset.annotate(event_count_num=Count('events__id'))
-            .annotate(
-                duration_num=Coalesce(
-                    Max('events__timestamp') - Min('events__timestamp'),
-                    0,
-                )
-            )
-            .annotate(
-                event_data_size_num=Coalesce(Sum(Length('events__data')), 0)
-            )
-        )
+        queryset = super().get_queryset(request).with_event_data()
         return queryset
 
     @admin.display(
-        description='Duration',
-        ordering='duration_num',
+        description='Event Duration',
+        ordering='event_duration_num',
     )
-    def duration(self, obj):
-        return obj.duration_num
+    def event_duration(self, obj):
+        return obj.event_duration_num
 
     @admin.display(
         description='Event Count',
@@ -70,6 +66,26 @@ class SessionAdmin(admin.ModelAdmin):
     )
     def event_data_size(self, obj):
         return obj.event_data_size_num
+
+    @admin.display(
+        description='Event Min Timestamp',
+        ordering='event_min_timestamp_num',
+    )
+    def event_min_timestamp(self, obj):
+        event_time = tz.make_aware(
+            dt.datetime.fromtimestamp(obj.event_min_timestamp_num / 1000)
+        )
+        return event_time
+
+    @admin.display(
+        description='Event Max Timestamp',
+        ordering='event_max_timestamp_num',
+    )
+    def event_max_timestamp(self, obj):
+        event_time = tz.make_aware(
+            dt.datetime.fromtimestamp(obj.event_max_timestamp_num / 1000)
+        )
+        return event_time
 
     @admin.display(
         description='View',

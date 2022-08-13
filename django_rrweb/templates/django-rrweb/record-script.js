@@ -1,4 +1,5 @@
 (function () {
+    let rrwebSessionKey = window.rrwebSessionKey || "{{ session_key }}";
     let rrwebEvents = [];
 
     rrwebRecord({
@@ -8,7 +9,7 @@
     });
 
     function rrwebSave() {
-        const body = JSON.stringify({ rrwebEvents });
+        const body = JSON.stringify({ rrwebSessionKey, rrwebEvents });
         rrwebEvents = [];
         fetch("//{{ request.get_host }}{% url 'django-rrweb-record-events' %}", {
             credentials: "include",

@@ -18,6 +18,7 @@ class ReplayTestCase(TestCase):
 
     def test_record(self):
         data = {
+            'rrwebSessionKey': 'abcdef0123456789',
             'rrwebEvents': [
                 {
                     'type': 0,
