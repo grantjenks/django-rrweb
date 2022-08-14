@@ -1,6 +1,30 @@
 # django-rrweb.com
 
 
+## Notes
+
+
+### Load Database from Production
+
+```
+ssh dokku@django-rrweb.com postgres:export postgres144-django-rrweb | pv > dump.export
+/opt/local/bin/pg_restore -cd django-rrweb dump.export
+```
+
+- Change password for users to "password".
+
+
+### Reset Database
+
+```
+ssh dokku@django-rrweb.com ps:stop django-rrweb
+ssh dokku@django-rrweb.com postgres:unlink postgres144-django-rrweb django-rrweb
+ssh dokku@django-rrweb.com postgres:destroy postgres144-django-rrweb
+ssh dokku@django-rrweb.com postgres:create postgres144-django-rrweb -I 14.4
+ssh dokku@django-rrweb.com postgres:link postgres144-django-rrweb django-rrweb
+```
+
+
 ## Setup
 
 1. Buy domain on domains.google.com
