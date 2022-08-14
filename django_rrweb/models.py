@@ -43,7 +43,7 @@ class Session(models.Model):
     objects = SessionQuerySet.as_manager()
 
     def __str__(self):
-        return f'Session<{self.key}>'
+        return self.key
 
 
 class Event(models.Model):
