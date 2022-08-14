@@ -9,7 +9,7 @@ def _make_session_key():
 
 
 class SessionQuerySet(models.QuerySet):
-    def with_event_data(self):
+    def with_extras(self):
         queryset = (
             self.annotate(event_count_num=models.Count('events__id'))
             .annotate(
@@ -46,6 +46,12 @@ class Session(models.Model):
         return self.key
 
 
+class EventQuerySet(models.QuerySet):
+    def with_extras(self):
+        queryset = self.annotate(data_length_num=functions.Length('data'))
+        return queryset
+
+
 class Event(models.Model):
     session = models.ForeignKey(
         Session,
@@ -55,6 +61,8 @@ class Event(models.Model):
     kind = models.SmallIntegerField()
     data = models.TextField(blank=True)
     timestamp = models.BigIntegerField()
+
+    objects = EventQuerySet.as_manager()
 
     def __str__(self):
         return f'#{self.id} @ {self.timestamp}'
