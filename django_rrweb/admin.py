@@ -32,7 +32,14 @@ def _three_sig_figs(num):
 class EventAdmin(admin.ModelAdmin):
     list_display = ['id', 'session', 'kind', 'timestamp', 'data_length']
     list_select_related = ['session']
-    readonly_fields = ['id', 'session', 'kind', 'timestamp', 'data_length', 'data']
+    readonly_fields = [
+        'id',
+        'session',
+        'kind',
+        'timestamp',
+        'data_length',
+        'data',
+    ]
     search_fields = ['session__key']
 
     def get_queryset(self, request):
