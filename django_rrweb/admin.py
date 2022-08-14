@@ -137,7 +137,9 @@ class SessionAdmin(admin.ModelAdmin):
     )
     def link_events(self, obj):
         url = reverse('admin:django_rrweb_event_changelist')
-        return format_html('<a href="{url}?q={key}">events</a>', url=url, key=obj.key)
+        return format_html(
+            '<a href="{url}?q={key}">events</a>', url=url, key=obj.key
+        )
 
     def get_urls(self):
         urls = super().get_urls()
