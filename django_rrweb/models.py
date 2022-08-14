@@ -20,12 +20,12 @@ class SessionQuerySet(models.QuerySet):
                 )
             )
             .annotate(
-                event_data_size_num=functions.Coalesce(
+                event_data_length_num=functions.Coalesce(
                     models.Sum(functions.Length('events__data')), 0
                 )
             )
-            .annotate(event_min_timestamp_num=models.Min('events__timestamp'))
-            .annotate(event_max_timestamp_num=models.Max('events__timestamp'))
+            .annotate(event_timestamp_min_num=models.Min('events__timestamp'))
+            .annotate(event_timestamp_max_num=models.Max('events__timestamp'))
         )
         return queryset
 
