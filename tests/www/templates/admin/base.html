@@ -1,8 +1,7 @@
 {% extends 'admin/base.html' %}
+{% load static %}
 
 {% block extrahead %}{{ block.super }}
-  <script
-      src="https://cdn.jsdelivr.net/npm/rrweb@1.1.3/dist/record/rrweb-record.min.js"
-  ></script>
+  <script src="{% static 'django-rrweb/rrweb-record-1-1-3.js' %}"></script>
   <script src="{% url 'django-rrweb-record-script' %}"></script>
 {% endblock %}

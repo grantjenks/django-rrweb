@@ -4,7 +4,7 @@
 {% block extrastyle %}
   {{ block.super }}
   <link rel="stylesheet" type="text/css" href="{% static "admin/css/dashboard.css" %}">
-  <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/rrweb-player@0.7.14/dist/style.css">
+  <link rel="stylesheet" type="text/css" href="{% static 'django-rrweb/rrweb-player-0-7-14-style.css' %}">
   <style>
    #player { font-family: sans-serif !important }
   </style>
@@ -12,7 +12,7 @@
 
 {% block extrahead %}
   {{ block.super }}
-  <script src="https://cdn.jsdelivr.net/npm/rrweb-player@0.7.14/dist/index.js"></script>
+  <script src="{% static 'django-rrweb/rrweb-player-0-7-14.js' %}"></script>
 {% endblock %}
 
 {% block coltype %}colMS{% endblock %}
