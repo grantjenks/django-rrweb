@@ -115,6 +115,8 @@ class SessionAdmin(admin.ModelAdmin):
         ordering='event_timestamp_min_num',
     )
     def event_timestamp_min(self, obj):
+        if obj.event_timestamp_min_num is None:
+            return '-'
         event_time = tz.make_aware(
             dt.datetime.fromtimestamp(obj.event_timestamp_min_num / 1000)
         )
@@ -125,6 +127,8 @@ class SessionAdmin(admin.ModelAdmin):
         ordering='event_timestamp_max_num',
     )
     def event_timestamp_max(self, obj):
+        if obj.event_timestamp_max_num is None:
+            return '-'
         event_time = tz.make_aware(
             dt.datetime.fromtimestamp(obj.event_timestamp_max_num / 1000)
         )
