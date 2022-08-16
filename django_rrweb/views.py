@@ -1,8 +1,10 @@
+import datetime as dt
 import json
 
 from django.http import HttpResponse
 from django.shortcuts import render
 from django.views.decorators.csrf import csrf_exempt
+from django.utils import timezone as tz
 
 from .models import Event, Session
 
@@ -33,6 +35,18 @@ def record_script(request):
     if session_key is None:
         session_key = Session.make_key()
         request.session['django_rrweb_session_key'] = session_key
+    else:
+        event = (
+            Event.objects.filter(session__key=session_key)
+            .order_by('-timestamp').only('timestamp').first()
+        )
+        update = (
+            event is not None
+            and (tz.now() - event.datetime) > dt.timedelta(minutes=10)
+        )
+        if update:
+            session_key = Session.make_key()
+            request.session['django_rrweb_session_key'] = session_key
     return render(
         request,
         'django-rrweb/record-script.js',
