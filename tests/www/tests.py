@@ -45,6 +45,10 @@ class ReplayTestCase(TestCase):
         )
         self.assertEqual(response.status_code, 200)
 
+    def test_record_get(self):
+        response = self.client.get('/backend/django_rrweb/record/events/')
+        self.assertEqual(response.status_code, 405)
+
     def test_admin_session(self):
         self.test_record()
         self.client.force_login(self.user)
