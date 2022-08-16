@@ -3,7 +3,6 @@ import datetime as dt
 from django.contrib import admin
 from django.shortcuts import get_object_or_404, render
 from django.urls import path, reverse
-from django.utils import timezone as tz
 from django.utils.html import format_html
 
 from .models import Event, Session
@@ -117,10 +116,7 @@ class SessionAdmin(admin.ModelAdmin):
     def event_timestamp_min(self, obj):
         if obj.event_timestamp_min_num is None:
             return '-'
-        event_time = tz.make_aware(
-            dt.datetime.fromtimestamp(obj.event_timestamp_min_num / 1000)
-        )
-        return event_time
+        return Event.timestamp_to_datetime(obj.event_timestamp_min_num)
 
     @admin.display(
         description='Event Timestamp Max',
@@ -129,10 +125,7 @@ class SessionAdmin(admin.ModelAdmin):
     def event_timestamp_max(self, obj):
         if obj.event_timestamp_max_num is None:
             return '-'
-        event_time = tz.make_aware(
-            dt.datetime.fromtimestamp(obj.event_timestamp_max_num / 1000)
-        )
-        return event_time
+        return Event.timestamp_to_datetime(obj.event_timestamp_max_num)
 
     @admin.display(
         description='Replay',
