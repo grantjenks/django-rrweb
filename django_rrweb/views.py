@@ -38,12 +38,12 @@ def record_script(request):
     else:
         event = (
             Event.objects.filter(session__key=session_key)
-            .order_by('-timestamp').only('timestamp').first()
+            .order_by('-timestamp')
+            .only('timestamp')
+            .first()
         )
-        update = (
-            event is not None
-            and (tz.now() - event.datetime) > dt.timedelta(minutes=10)
-        )
+        delta = dt.timedelta(minutes=10)
+        update = event is not None and (tz.now() - event.datetime) > delta
         if update:
             session_key = Session.make_key()
             request.session['django_rrweb_session_key'] = session_key

@@ -27,7 +27,8 @@ class ReplayTestCase(TestCase):
         Event.objects.create(session=session, kind=0, data='', timestamp=1)
         response = self.client.get('/backend/django_rrweb/record/script/')
         self.assertEqual(response.status_code, 200)
-        self.assertNotEqual(key, self.client.session['django_rrweb_session_key'])
+        new_key = self.client.session['django_rrweb_session_key']
+        self.assertNotEqual(key, new_key)
 
     def test_record(self):
         data = {
