@@ -37,7 +37,7 @@ setuptools.setup(
     author_email='contact@grantjenks.com',
     url='https://grantjenks.com/docs/django-rrweb/',
     license='Apache 2.0',
-    packages=['django_rrweb'],
+    packages=['django_rrweb', 'django_rrweb.migrations'],
     include_package_data=True,
     tests_require=['tox'],
     cmdclass={'test': Tox},
