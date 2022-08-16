@@ -10,6 +10,8 @@ from .models import Event, Session
 @csrf_exempt
 def record_events(request):
     """Record events"""
+    if request.method != 'POST':
+        return HttpResponse('ERROR: POST request required', status=405)
     obj = json.load(request)
     session, _ = Session.objects.get_or_create(key=obj['rrwebSessionKey'])
     events = [
