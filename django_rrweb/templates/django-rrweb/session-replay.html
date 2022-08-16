@@ -33,15 +33,17 @@
   <div id="content-main">
     <div id="player"></div>
     <script>
+     /* <!-- */
      const events = [
          {% for event in events %}
          {
-             'type': {{ event.kind }},
-             'data': {{ event.data|safe }},
-             'timestamp': {{ event.timestamp }},
+             "type": {{ event.kind }},
+             "data": {{ event.data|safe }},
+             "timestamp": {{ event.timestamp }},
          },
          {% endfor %}
      ];
+     /* --> */
      let divPlayer = document.getElementById("player");
      let player = new rrwebPlayer({
          target: divPlayer,
