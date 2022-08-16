@@ -1,7 +1,9 @@
+import datetime as dt
 import uuid
 
 from django.db import models
 from django.db.models import functions
+from django.utils import timezone as tz
 
 
 def _make_session_key():
@@ -63,6 +65,15 @@ class Event(models.Model):
     timestamp = models.BigIntegerField()
 
     objects = EventQuerySet.as_manager()
+
+    @property
+    def datetime(self):
+        return self.timestamp_to_datetime()
+
+    def timestamp_to_datetime(self):
+        timestamp = self.timestamp if isinstance(self, Event) else self
+        datetime = tz.make_aware(dt.datetime.fromtimestamp(timestamp / 1000))
+        return datetime
 
     def __str__(self):
         return f'#{self.id} @ {self.timestamp}'
