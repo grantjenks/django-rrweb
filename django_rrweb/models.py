@@ -68,12 +68,12 @@ class PageQuerySet(models.QuerySet):
 
 class Page(models.Model):
     create_time = models.DateTimeField(auto_now_add=True)
+    key = models.CharField(default=_make_key, max_length=100, unique=True)
     session = models.ForeignKey(
         Session,
         on_delete=models.CASCADE,
-        related_name='events',
+        related_name='pages',
     )
-    key = models.CharField(default=_make_key, max_length=100, unique=True)
 
     make_key = staticmethod(_make_key)
 
