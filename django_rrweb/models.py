@@ -6,7 +6,7 @@ from django.db.models import functions
 from django.utils import timezone as tz
 
 
-def _make_session_key():
+def _make_key():
     return str(uuid.uuid4()).replace('-', '')
 
 
@@ -34,13 +34,9 @@ class SessionQuerySet(models.QuerySet):
 
 class Session(models.Model):
     create_time = models.DateTimeField(auto_now_add=True)
-    key = models.CharField(
-        default=_make_session_key,
-        max_length=100,
-        unique=True,
-    )
+    key = models.CharField(default=_make_key, max_length=100, unique=True)
 
-    make_key = staticmethod(_make_session_key)
+    make_key = staticmethod(_make_key)
 
     objects = SessionQuerySet.as_manager()
 
