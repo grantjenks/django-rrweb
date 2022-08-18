@@ -2,7 +2,7 @@ import pytest
 from django.contrib.auth.models import User
 from django.test import TestCase
 
-from django_rrweb.models import Event, Session
+from django_rrweb.models import Event, Page, Session
 
 pytestmark = pytest.mark.django_db
 
@@ -24,7 +24,8 @@ class ReplayTestCase(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(key, self.client.session['django_rrweb_session_key'])
         session = Session.objects.create(key=key)
-        Event.objects.create(session=session, kind=0, data='', timestamp=1)
+        page = Page.objects.create(key=key, session=session)
+        Event.objects.create(page=page, kind=0, data='', timestamp=1)
         response = self.client.get('/backend/django_rrweb/record/script/')
         self.assertEqual(response.status_code, 200)
         new_key = self.client.session['django_rrweb_session_key']
@@ -32,7 +33,6 @@ class ReplayTestCase(TestCase):
 
     def test_record(self):
         data = {
-            'rrwebSessionKey': 'abcdef0123456789',
             'rrwebEvents': [
                 {
                     'type': 0,
@@ -45,6 +45,8 @@ class ReplayTestCase(TestCase):
                     'timestamp': 123456790,
                 },
             ],
+            'rrwebPageKey': 'test-page-key',
+            'rrwebSessionKey': 'test-session-key',
         }
         response = self.client.post(
             '/backend/django_rrweb/record/events/',
@@ -57,22 +59,32 @@ class ReplayTestCase(TestCase):
         response = self.client.get('/backend/django_rrweb/record/events/')
         self.assertEqual(response.status_code, 405)
 
-    def test_admin_session(self):
-        self.test_record()
-        self.client.force_login(self.user)
-        response = self.client.get('/backend/django_rrweb/session/')
-        self.assertEqual(response.status_code, 200)
-
-    def test_admin_session_replay(self):
-        self.test_record()
-        self.client.force_login(self.user)
-        response = self.client.get('/backend/django_rrweb/session/1/replay/')
-        self.assertEqual(response.status_code, 200)
-
     def test_admin_event(self):
         self.test_record()
         self.client.force_login(self.user)
         response = self.client.get('/backend/django_rrweb/event/')
         self.assertEqual(response.status_code, 200)
         response = self.client.get('/backend/django_rrweb/event/1/change/')
+        self.assertEqual(response.status_code, 200)
+
+    def test_admin_page(self):
+        self.test_record()
+        self.client.force_login(self.user)
+        response = self.client.get('/backend/django_rrweb/page/')
+        self.assertEqual(response.status_code, 200)
+        response = self.client.get('/backend/django_rrweb/page/1/change/')
+        self.assertEqual(response.status_code, 200)
+
+    def test_admin_page_replay(self):
+        self.test_record()
+        self.client.force_login(self.user)
+        response = self.client.get('/backend/django_rrweb/page/1/replay/')
+        self.assertEqual(response.status_code, 200)
+
+    def test_admin_session(self):
+        self.test_record()
+        self.client.force_login(self.user)
+        response = self.client.get('/backend/django_rrweb/session/')
+        self.assertEqual(response.status_code, 200)
+        response = self.client.get('/backend/django_rrweb/session/1/change/')
         self.assertEqual(response.status_code, 200)
