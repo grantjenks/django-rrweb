@@ -42,6 +42,7 @@ class SessionQuerySet(models.QuerySet):
 class Session(models.Model):
     create_time = models.DateTimeField(auto_now_add=True)
     key = models.CharField(default=_make_key, max_length=100, unique=True)
+    notes = models.TextField(blank=True, default='')
 
     make_key = staticmethod(_make_key)
 
@@ -81,6 +82,7 @@ class Page(models.Model):
         on_delete=models.CASCADE,
         related_name='pages',
     )
+    notes = models.TextField(blank=True, default='')
 
     make_key = staticmethod(_make_key)
 

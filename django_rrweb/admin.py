@@ -129,10 +129,10 @@ class PageAdmin(admin.ModelAdmin, EventMixin):
         'event_timestamp_max',
         'session',
     ]
-    fields = list_display
-    readonly_fields = fields
-    search_fields = ['key', 'session__key']
+    readonly_fields = list_display
+    fields = readonly_fields + ['notes']
     ordering = ['-create_time']
+    search_fields = ['key', 'session__key', 'notes']
 
     def get_queryset(self, request):
         queryset = super().get_queryset(request).with_extras()
@@ -183,9 +183,10 @@ class SessionAdmin(admin.ModelAdmin, EventMixin):
         'event_timestamp_min',
         'event_timestamp_max',
     ]
-    fields = list_display
-    readonly_fields = fields
+    readonly_fields = list_display
+    fields = readonly_fields + ['notes']
     ordering = ['-create_time']
+    search_fields = ['key', 'notes']
 
     def get_queryset(self, request):
         queryset = super().get_queryset(request).with_extras()
