@@ -16,15 +16,43 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Page',
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                (
+                    'id',
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name='ID',
+                    ),
+                ),
                 ('create_time', models.DateTimeField(auto_now_add=True)),
-                ('key', models.CharField(default=django_rrweb.models._make_key, max_length=100, unique=True)),
-                ('session', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='pages', to='django_rrweb.session')),
+                (
+                    'key',
+                    models.CharField(
+                        default=django_rrweb.models._make_key,
+                        max_length=100,
+                        unique=True,
+                    ),
+                ),
+                (
+                    'session',
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name='pages',
+                        to='django_rrweb.session',
+                    ),
+                ),
             ],
         ),
         migrations.AddField(
             model_name='event',
             name='page',
-            field=models.ForeignKey(default=None, null=True, on_delete=django.db.models.deletion.CASCADE, related_name='events', to='django_rrweb.page'),
+            field=models.ForeignKey(
+                default=None,
+                null=True,
+                on_delete=django.db.models.deletion.CASCADE,
+                related_name='events',
+                to='django_rrweb.page',
+            ),
         ),
     ]

@@ -36,6 +36,10 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='event',
             name='page',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='events', to='django_rrweb.page'),
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.CASCADE,
+                related_name='events',
+                to='django_rrweb.page',
+            ),
         ),
     ]
