@@ -39,7 +39,7 @@ def record_script(request):
         request.session['django_rrweb_session_key'] = session_key
     else:
         event = (
-            Event.objects.filter(session__key=session_key)
+            Event.objects.filter(page__session__key=session_key)
             .order_by('-timestamp')
             .only('timestamp')
             .first()
