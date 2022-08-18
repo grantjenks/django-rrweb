@@ -1,7 +1,8 @@
 {% load static %}(function () {
     function rrwebSetup() {
-        let rrwebSessionKey = window.rrwebSessionKey || "{{ session_key }}";
         let rrwebEvents = [];
+        let rrwebPageKey = "{{ page_key }}";
+        let rrwebSessionKey = window.rrwebSessionKey || "{{ session_key }}";
 
         window.rrwebRecord({
             emit(event) {
@@ -10,7 +11,7 @@
         });
 
         function rrwebSave() {
-            const body = JSON.stringify({ rrwebEvents, rrwebSessionKey });
+            const body = JSON.stringify({ rrwebEvents, rrwebPageKey, rrwebSessionKey });
             rrwebEvents = [];
             fetch("//{{ request.get_host }}{% url 'django-rrweb-record-events' %}", {
                 body,
