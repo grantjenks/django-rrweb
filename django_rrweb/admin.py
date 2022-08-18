@@ -113,6 +113,7 @@ class EventMixin:
             '<a href="{url}?q={key}">events</a>', url=url, key=obj.key
         )
 
+
 @admin.register(Page)
 class PageAdmin(admin.ModelAdmin, EventMixin):
     list_display = [
