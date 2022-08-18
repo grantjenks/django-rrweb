@@ -16,7 +16,7 @@ class Migration(migrations.Migration):
             model_name='session',
             name='key',
             field=models.CharField(
-                default=django_rrweb.models._make_session_key,
+                default=django_rrweb.models._make_key,
                 max_length=100,
                 unique=True,
             ),
