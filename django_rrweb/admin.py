@@ -5,7 +5,7 @@ from django.shortcuts import get_object_or_404, render
 from django.urls import path, reverse
 from django.utils.html import format_html
 
-from .models import Event, Session
+from .models import Event, Page, Session
 
 
 def _three_sig_figs(num):
@@ -29,21 +29,29 @@ def _three_sig_figs(num):
 
 @admin.register(Event)
 class EventAdmin(admin.ModelAdmin):
-    list_display = ['id', 'session', 'kind', 'timestamp', 'data_length']
-    list_select_related = ['session']
-    readonly_fields = [
+    list_display = [
         'id',
-        'session',
-        'kind',
         'timestamp',
         'data_length',
-        'data',
+        'kind',
+        'page',
+        'session',
     ]
-    search_fields = ['session__key']
+    list_select_related = ['page', 'page__session']
+    fields = list_display + ['data']
+    readonly_fields = fields
+    search_fields = ['page__key', 'page__session__key']
 
     def get_queryset(self, request):
         queryset = super().get_queryset(request).with_extras()
         return queryset
+
+    @admin.display(
+        description='Session',
+        ordering='page__session__id',
+    )
+    def session(self, obj):
+        return obj.page.session
 
     @admin.display(
         description='Data Length',
@@ -53,38 +61,7 @@ class EventAdmin(admin.ModelAdmin):
         return _three_sig_figs(obj.data_length_num)
 
 
-@admin.register(Session)
-class SessionAdmin(admin.ModelAdmin):
-    list_display = [
-        'key',
-        'create_time',
-        'event_duration',
-        'event_count',
-        'event_data_length',
-        'event_timestamp_min',
-        'event_timestamp_max',
-        'link_replay',
-        'link_events',
-    ]
-
-    fields = [
-        'key',
-        'create_time',
-        'event_duration',
-        'event_count',
-        'event_data_length',
-        'event_timestamp_min',
-        'event_timestamp_max',
-        'link_replay',
-        'link_events',
-    ]
-
-    readonly_fields = fields
-
-    def get_queryset(self, request):
-        queryset = super().get_queryset(request).with_extras()
-        return queryset
-
+class EventMixin:
     @admin.display(
         description='Event Duration',
         ordering='event_duration_num',
@@ -128,26 +105,6 @@ class SessionAdmin(admin.ModelAdmin):
         return Event.timestamp_to_datetime(obj.event_timestamp_max_num)
 
     @admin.display(
-        description='Replay',
-    )
-    def link_replay(self, obj):
-        url = reverse(
-            'admin:django-rrweb-session-replay',
-            kwargs={'session_id': obj.id},
-        )
-        return format_html('<a href="{url}">replay</a>', url=url)
-
-    def replay_view(self, request, session_id):
-        session = get_object_or_404(Session, id=session_id)
-        events = session.events.order_by('timestamp')
-        context = dict(
-            self.admin_site.each_context(request),
-            events=events,
-            session=session,
-        )
-        return render(request, 'django-rrweb/session-replay.html', context)
-
-    @admin.display(
         description='Events',
     )
     def link_events(self, obj):
@@ -156,12 +113,92 @@ class SessionAdmin(admin.ModelAdmin):
             '<a href="{url}?q={key}">events</a>', url=url, key=obj.key
         )
 
+@admin.register(Page)
+class PageAdmin(admin.ModelAdmin, EventMixin):
+    list_display = [
+        'key',
+        'link_replay',
+        'link_events',
+        'create_time',
+        'event_duration',
+        'event_count',
+        'event_data_length',
+        'event_timestamp_min',
+        'event_timestamp_max',
+        'session',
+    ]
+    fields = list_display
+    readonly_fields = fields
+    search_fields = ['key', 'session__key']
+
+    def get_queryset(self, request):
+        queryset = super().get_queryset(request).with_extras()
+        return queryset
+
+    @admin.display(
+        description='Replay',
+    )
+    def link_replay(self, obj):
+        url = reverse(
+            'admin:django-rrweb-page-replay',
+            kwargs={'page_id': obj.id},
+        )
+        return format_html('<a href="{url}">replay</a>', url=url)
+
+    def replay_view(self, request, page_id):
+        page = get_object_or_404(Page, id=page_id)
+        events = page.events.order_by('timestamp')
+        context = dict(
+            self.admin_site.each_context(request),
+            events=events,
+            page=page,
+        )
+        return render(request, 'django-rrweb/page-replay.html', context)
+
     def get_urls(self):
         urls = super().get_urls()
         replay_path = path(
-            '<session_id>/replay/',
+            '<page_id>/replay/',
             self.replay_view,
-            name='django-rrweb-session-replay',
+            name='django-rrweb-page-replay',
         )
         urls.insert(0, replay_path)
         return urls
+
+
+@admin.register(Session)
+class SessionAdmin(admin.ModelAdmin, EventMixin):
+    list_display = [
+        'key',
+        'link_pages',
+        'link_events',
+        'create_time',
+        'page_count',
+        'event_duration',
+        'event_count',
+        'event_data_length',
+        'event_timestamp_min',
+        'event_timestamp_max',
+    ]
+    fields = list_display
+    readonly_fields = fields
+
+    def get_queryset(self, request):
+        queryset = super().get_queryset(request).with_extras()
+        return queryset
+
+    @admin.display(
+        description='Page Count',
+        ordering='page_count_num',
+    )
+    def page_count(self, obj):
+        return _three_sig_figs(obj.page_count_num)
+
+    @admin.display(
+        description='Pages',
+    )
+    def link_pages(self, obj):
+        url = reverse('admin:django_rrweb_page_changelist')
+        return format_html(
+            '<a href="{url}?q={key}">pages</a>', url=url, key=obj.key
+        )

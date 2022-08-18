@@ -13,21 +13,28 @@ def _make_key():
 class SessionQuerySet(models.QuerySet):
     def with_extras(self):
         queryset = (
-            self.annotate(event_count_num=models.Count('events__id'))
+            self.annotate(
+                page_count_num=models.Count('pages__id', distinct=True)
+            )
+            .annotate(event_count_num=models.Count('pages__events__id'))
             .annotate(
                 event_duration_num=functions.Coalesce(
-                    models.Max('events__timestamp')
-                    - models.Min('events__timestamp'),
+                    models.Max('pages__events__timestamp')
+                    - models.Min('pages__events__timestamp'),
                     0,
                 )
             )
             .annotate(
                 event_data_length_num=functions.Coalesce(
-                    models.Sum(functions.Length('events__data')), 0
+                    models.Sum(functions.Length('pages__events__data')), 0
                 )
             )
-            .annotate(event_timestamp_min_num=models.Min('events__timestamp'))
-            .annotate(event_timestamp_max_num=models.Max('events__timestamp'))
+            .annotate(
+                event_timestamp_min_num=models.Min('pages__events__timestamp')
+            )
+            .annotate(
+                event_timestamp_max_num=models.Max('pages__events__timestamp')
+            )
         )
         return queryset
 

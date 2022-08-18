@@ -23,8 +23,8 @@
   <div class="breadcrumbs">
     <a href="{% url 'admin:index' %}">{% translate 'Home' %}</a>
     &rsaquo; <a href="{% url 'admin:app_list' 'django_rrweb' %}">Django_Rrweb</a>
-    &rsaquo; <a href="{% url 'admin:django_rrweb_session_changelist' %}">Sessions</a>
-    &rsaquo; <a href="{% url 'admin:django_rrweb_session_change' session.id %}">{{ session }}</a>
+    &rsaquo; <a href="{% url 'admin:django_rrweb_page_changelist' %}">Pages</a>
+    &rsaquo; <a href="{% url 'admin:django_rrweb_page_change' page.id %}">{{ page }}</a>
     &rsaquo; Replay
   </div>
 {% endblock %}
