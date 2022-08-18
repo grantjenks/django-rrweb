@@ -15,6 +15,7 @@ setuptools.setup(
         'Django==3.2.*',
         'dj-database-url',
         'django-cors-headers',
+        'django-mass-edit',
         'gunicorn',
         'psycopg2-binary',
         'whitenoise',

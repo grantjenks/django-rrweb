@@ -2,6 +2,7 @@
 -r requirements.txt
 blue
 coverage
+django-mass-edit
 doc8
 flake8
 isort

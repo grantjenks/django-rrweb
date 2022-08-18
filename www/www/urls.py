@@ -21,5 +21,6 @@ from . import views
 urlpatterns = [
     path('', views.index),
     path('backend/', include('django_rrweb.urls')),
+    path('backend/', include('massadmin.urls')),
     path('backend/', admin.site.urls),
 ]
