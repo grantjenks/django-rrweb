@@ -11,6 +11,9 @@
         });
 
         function rrwebSave() {
+            if (rrwebEvents.length === 0) {
+                return;
+            }
             const body = JSON.stringify({ rrwebEvents, rrwebPageKey, rrwebSessionKey });
             rrwebEvents = [];
             fetch("//{{ request.get_host }}{% url 'django-rrweb-record-events' %}", {
