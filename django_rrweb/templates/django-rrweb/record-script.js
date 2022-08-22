@@ -3,6 +3,7 @@
         let rrwebEvents = [];
         let rrwebPageKey = "{{ page_key }}";
         let rrwebSessionKey = window.rrwebSessionKey || "{{ session_key }}";
+        window.rrwebSessionKey = rrwebSessionKey;
 
         window.rrwebRecord({
             emit(event) {
