@@ -86,8 +86,10 @@ jobs:
     needs: checks
     runs-on: ubuntu-latest
     steps:
-    - name: Start MySQL
-      run: sudo /etc/init.d/mysql start
+    - name: Setup MySQL
+      run: |
+        sudo /etc/init.d/mysql start
+        sudo mysql -c "GRANT ALL PRIVILEGES ON *.* TO '$USER'@'localhost'"
     - name: Set up Python x64
       uses: actions/setup-python@v3
       with:
@@ -106,6 +108,8 @@ jobs:
     services:
       postgres:
         image: postgres
+        env:
+          POSTGRES_HOST_AUTH_METHOD: trust
         options: >-
           --health-cmd pg_isready
           --health-interval 10s
