@@ -4,86 +4,86 @@ on: [push, pull_request]
 
 jobs:
 
-  checks:
-    runs-on: ubuntu-latest
-    strategy:
-      fail-fast: false
-      max-parallel: 8
-      matrix:
-        check: [bluecheck, doc8, docs, flake8, isortcheck, rstcheck]
-    steps:
-    - uses: actions/checkout@v3
-    - name: Set up Python
-      uses: actions/setup-python@v3
-      with:
-        python-version: '3.10'
-    - name: Install dependencies
-      run: |
-        pip install --upgrade pip
-        pip install tox
-    - name: Run checks with tox
-      run: |
-        tox -e ${{ matrix.check }}
+  # checks:
+  #   runs-on: ubuntu-latest
+  #   strategy:
+  #     fail-fast: false
+  #     max-parallel: 8
+  #     matrix:
+  #       check: [bluecheck, doc8, docs, flake8, isortcheck, rstcheck]
+  #   steps:
+  #   - uses: actions/checkout@v3
+  #   - name: Set up Python
+  #     uses: actions/setup-python@v3
+  #     with:
+  #       python-version: '3.10'
+  #   - name: Install dependencies
+  #     run: |
+  #       pip install --upgrade pip
+  #       pip install tox
+  #   - name: Run checks with tox
+  #     run: |
+  #       tox -e ${{ matrix.check }}
 
-  test-os:
-    needs: checks
-    runs-on: ${{ matrix.os }}
-    strategy:
-      matrix:
-        os: [ubuntu-latest, macos-latest, windows-latest]
-    steps:
-    - name: Set up Python x64
-      uses: actions/setup-python@v3
-      with:
-        python-version: '3.10'
-    - uses: actions/checkout@v3
-    - name: Install tox
-      run: |
-        pip install --upgrade pip
-        pip install tox
-    - name: Test with tox
-      run: tox -e py-django32-sqlite3
+  # test-os:
+  #   needs: checks
+  #   runs-on: ${{ matrix.os }}
+  #   strategy:
+  #     matrix:
+  #       os: [ubuntu-latest, macos-latest, windows-latest]
+  #   steps:
+  #   - name: Set up Python x64
+  #     uses: actions/setup-python@v3
+  #     with:
+  #       python-version: '3.10'
+  #   - uses: actions/checkout@v3
+  #   - name: Install tox
+  #     run: |
+  #       pip install --upgrade pip
+  #       pip install tox
+  #   - name: Test with tox
+  #     run: tox -e py-django32-sqlite3
 
-  test-py:
-    needs: checks
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        python-version: [3.7, 3.8, 3.9, '3.10']
-    steps:
-    - name: Set up Python ${{ matrix.python-version }} x64
-      uses: actions/setup-python@v3
-      with:
-        python-version: ${{ matrix.python-version }}
-    - uses: actions/checkout@v3
-    - name: Install tox
-      run: |
-        pip install --upgrade pip
-        pip install tox
-    - name: Test with tox
-      run: tox -e py-django32-sqlite3
+  # test-py:
+  #   needs: checks
+  #   runs-on: ubuntu-latest
+  #   strategy:
+  #     matrix:
+  #       python-version: [3.7, 3.8, 3.9, '3.10']
+  #   steps:
+  #   - name: Set up Python ${{ matrix.python-version }} x64
+  #     uses: actions/setup-python@v3
+  #     with:
+  #       python-version: ${{ matrix.python-version }}
+  #   - uses: actions/checkout@v3
+  #   - name: Install tox
+  #     run: |
+  #       pip install --upgrade pip
+  #       pip install tox
+  #   - name: Test with tox
+  #     run: tox -e py-django32-sqlite3
 
-  test-dj:
-    needs: checks
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        django-version: [django32, django40]
-    steps:
-    - name: Set up Python x64
-      uses: actions/setup-python@v3
-      with:
-        python-version: '3.10'
-    - uses: actions/checkout@v3
-    - name: Install tox
-      run: |
-        pip install --upgrade pip
-        pip install tox
-    - name: Test with tox
-      run: tox -e py-${{ matrix.django-version }}-sqlite3
+  # test-dj:
+  #   needs: checks
+  #   runs-on: ubuntu-latest
+  #   strategy:
+  #     matrix:
+  #       django-version: [django32, django40]
+  #   steps:
+  #   - name: Set up Python x64
+  #     uses: actions/setup-python@v3
+  #     with:
+  #       python-version: '3.10'
+  #   - uses: actions/checkout@v3
+  #   - name: Install tox
+  #     run: |
+  #       pip install --upgrade pip
+  #       pip install tox
+  #   - name: Test with tox
+  #     run: tox -e py-${{ matrix.django-version }}-sqlite3
 
   test-mysql:
-    needs: checks
+    # needs: checks
     runs-on: ubuntu-latest
     steps:
     - name: Setup MySQL
@@ -102,7 +102,7 @@ jobs:
       run: tox -e py-django32-mysql
 
   test-postgresql:
-    needs: checks
+    # needs: checks
     runs-on: ubuntu-latest
     steps:
     - name: Setup PostgreSQL
