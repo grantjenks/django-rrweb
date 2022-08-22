@@ -89,8 +89,7 @@ jobs:
     - name: Setup MySQL
       run: |
         sudo systemctl start mysql.service
-        sudo mysql -uroot -p -e "CREATE USER '$USER'@'localhost'"
-        sudo mysql -uroot -p -e "GRANT ALL PRIVILEGES ON *.* TO '$USER'@'localhost' WITH GRANT OPTION"
+        mysql -e "SELECT 1"
     - name: Set up Python x64
       uses: actions/setup-python@v3
       with:
@@ -103,24 +102,24 @@ jobs:
     - name: Test with tox
       run: tox -e py-django32-mysql
 
-  test-postgresql:
-    # needs: checks
-    runs-on: ubuntu-latest
-    steps:
-    - name: Setup PostgreSQL
-      run: |
-        sudo apt update
-        sudo apt install postgresql postgresql-contrib
-        sudo systemctl start postgresql.service
-        sudo -u postgres createuser --superuser $USER
-    - name: Set up Python x64
-      uses: actions/setup-python@v3
-      with:
-        python-version: '3.10'
-    - uses: actions/checkout@v3
-    - name: Install tox
-      run: |
-        pip install --upgrade pip
-        pip install tox
-    - name: Test with tox
-      run: tox -e py-django32-postgresql
+  # test-postgresql:
+  #   needs: checks
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #   - name: Setup PostgreSQL
+  #     run: |
+  #       sudo apt update
+  #       sudo apt install postgresql postgresql-contrib
+  #       sudo systemctl start postgresql.service
+  #       sudo -u postgres createuser --superuser $USER
+  #   - name: Set up Python x64
+  #     uses: actions/setup-python@v3
+  #     with:
+  #       python-version: '3.10'
+  #   - uses: actions/checkout@v3
+  #   - name: Install tox
+  #     run: |
+  #       pip install --upgrade pip
+  #       pip install tox
+  #   - name: Test with tox
+  #     run: tox -e py-django32-postgresql
