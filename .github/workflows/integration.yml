@@ -88,7 +88,7 @@ jobs:
     steps:
     - name: Setup MySQL
       run: |
-        sudo /etc/init.d/mysql start
+        sudo systemctl start mysql.service
         sudo mysql -c "GRANT ALL PRIVILEGES ON *.* TO '$USER'@'localhost'"
     - name: Set up Python x64
       uses: actions/setup-python@v3
@@ -105,17 +105,12 @@ jobs:
   test-postgresql:
     needs: checks
     runs-on: ubuntu-latest
-    services:
-      postgres:
-        image: postgres
-        env:
-          POSTGRES_HOST_AUTH_METHOD: trust
-        options: >-
-          --health-cmd pg_isready
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 5
     steps:
+    - name: Setup PostgreSQL
+      run: |
+        sudo apt install postgresql postgresql-contrib
+        sudo systemctl start postgresql.service
+        sudo -u postgres createuser --superuser $USER
     - name: Set up Python x64
       uses: actions/setup-python@v3
       with:
