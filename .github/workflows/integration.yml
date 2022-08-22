@@ -89,7 +89,8 @@ jobs:
     - name: Setup MySQL
       run: |
         sudo systemctl start mysql.service
-        mysql -uroot -proot -e "SELECT 1"
+        mysql -uroot -proot -e "CREATE USER '$USER'@'localhost'"
+        mysql -uroot -proot -e "GRANT ALL PRIVILEGES ON *.* TO '$USER'@'localhost' WITH GRANT OPTION"
     - name: Set up Python x64
       uses: actions/setup-python@v3
       with:
