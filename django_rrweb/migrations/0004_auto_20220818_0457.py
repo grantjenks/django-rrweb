@@ -14,7 +14,6 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-
         migrations.RunSQL(
             f"""
             INSERT INTO django_rrweb_page
