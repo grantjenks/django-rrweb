@@ -72,13 +72,17 @@ class ReplayTestCase(TestCase):
         self.client.force_login(self.user)
         response = self.client.get('/backend/django_rrweb/page/')
         self.assertEqual(response.status_code, 200)
-        response = self.client.get('/backend/django_rrweb/page/1/change/')
+        page_id = Page.objects.all().values_list('id', flat=True).first()
+        url = f'/backend/django_rrweb/page/{page_id}/change/'
+        response = self.client.get(url)
         self.assertEqual(response.status_code, 200)
 
     def test_admin_page_replay(self):
         self.test_record()
         self.client.force_login(self.user)
-        response = self.client.get('/backend/django_rrweb/page/1/replay/')
+        page_id = Page.objects.all().values_list('id', flat=True).first()
+        url = f'/backend/django_rrweb/page/{page_id}/replay/'
+        response = self.client.get(url)
         self.assertEqual(response.status_code, 200)
 
     def test_admin_session(self):
@@ -86,5 +90,7 @@ class ReplayTestCase(TestCase):
         self.client.force_login(self.user)
         response = self.client.get('/backend/django_rrweb/session/')
         self.assertEqual(response.status_code, 200)
-        response = self.client.get('/backend/django_rrweb/session/1/change/')
+        session_id = Session.objects.all().values_list('id', flat=True).first()
+        url = f'/backend/django_rrweb/session/{session_id}/change/'
+        response = self.client.get(url)
         self.assertEqual(response.status_code, 200)
