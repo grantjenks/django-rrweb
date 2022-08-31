@@ -3,6 +3,7 @@ import logging
 import time
 
 from django.core.management.base import BaseCommand
+from django.db.models import Count
 from django.utils import timezone as tz
 
 from ...models import Page, Session
@@ -31,6 +32,13 @@ class Command(BaseCommand):
                 notes='',
                 pages__notes='',
                 create_time__lt=past,
+            )
+            log.warning('Deleting %s sessions', sessions.count())
+            sessions.delete()
+            sessions = (
+                Session.objects.filter(notes='', create_time__lt=past)
+                .annotate(pages_count=Count('pages__id'))
+                .filter(pages_count=0)
             )
             log.warning('Deleting %s sessions', sessions.count())
             sessions.delete()
