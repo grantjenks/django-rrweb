@@ -87,3 +87,10 @@ sudo su - postgres
 git remote add dokku dokku@django-rrweb.com:django-rrweb
 git push dokku main:main
 ```
+
+
+### Start worker process
+
+```
+ssh dokku@django-rrweb.com ps:scale django-rrweb rrwebpurge=1
+```
