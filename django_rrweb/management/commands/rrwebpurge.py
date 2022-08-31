@@ -14,9 +14,9 @@ class Command(BaseCommand):
     help = 'Purges pages and sessions'
 
     def add_arguments(self, parser):
-        parser.add_argument('--delay', default=600)
-        parser.add_argument('--limit', default=float('inf'))
-        parser.add_argument('--max-age', default=7)
+        parser.add_argument('--delay', default=600, type=int)
+        parser.add_argument('--limit', default=float('inf'), type=int)
+        parser.add_argument('--max-age', default=7, type=int)
 
     def handle(self, *args, **options):
         delay = options['delay']
