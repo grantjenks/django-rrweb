@@ -100,7 +100,6 @@ class ReplayTestCase(TestCase):
 
 
 class RrwebPurgeTestCase(TestCase):
-
     def test_rrweb_purge(self):
         output = io.StringIO()
         args = 'rrwebpurge', '--limit', '2', '--delay', '1'
