@@ -5,6 +5,7 @@ coverage
 django-mass-edit
 doc8
 flake8
+honcho
 isort
 ipython
 pytest
