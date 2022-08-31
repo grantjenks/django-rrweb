@@ -1,5 +1,8 @@
+import io
+
 import pytest
 from django.contrib.auth.models import User
+from django.core.management import call_command
 from django.test import TestCase
 
 from django_rrweb.models import Event, Page, Session
@@ -94,3 +97,12 @@ class ReplayTestCase(TestCase):
         url = f'/backend/django_rrweb/session/{session_id}/change/'
         response = self.client.get(url)
         self.assertEqual(response.status_code, 200)
+
+
+class RrwebPurgeTestCase(TestCase):
+
+    def test_rrweb_purge(self):
+        output = io.StringIO()
+        args = 'rrwebpurge', '--limit', '2', '--delay', '1'
+        call_command(*args, stdout=output)
+        assert output.getvalue() == ''
