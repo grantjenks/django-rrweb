@@ -19,3 +19,5 @@
 db.sqlite3
 
 /docs/_build/
+
+dump.export
